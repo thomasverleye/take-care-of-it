@@ -39,43 +39,30 @@ export async function loader({ params }: Route.LoaderArgs) {
   }
 }
 
-export default function Recipe({ loaderData }: Route.ComponentProps) {
-  const { recipe } = loaderData;
-  
+export default function Recipe({ loaderData: { recipe } }: Route.ComponentProps) {  
   return (
-    <main>
-      <h1>{recipe.title}</h1>
-      
-      {/* Hero Image */}
-      {recipe.image?.[0] && (
-        <img 
-          src={recipe.image[0].url} 
-          alt={recipe.title}
-        />
-      )}
-      
-      {/* Summary */}
-      <p>{recipe.summary}</p>
-      
-      {/* Meta Information */}
-      <ul>
-        <li>Will take {recipe.time} minutes to make</li>
-        <li>Serves {recipe.servingSize} people</li>
-        {recipe.averageRating && <li>Rating of {recipe.averageRating} of 5 stars</li>}
-      </ul>
-      
-      {/* Chefs */}
-      {recipe.chefs && recipe.chefs.length > 0 && (
-        <section>
-          <h2>Chef{recipe.chefs.length > 1 ? 's' : ''}</h2>
-          {recipe.chefs?.map(chef => (
-            <Fragment key={chef.title}>
-              <h3>{chef.title}</h3>
-              <p>{chef.summary}</p>
-            </Fragment>
-          ))}
-        </section>
-      )}
+    <>
+      <section>
+        <h1>{recipe.title}</h1>
+
+        {/* Summary */}
+        <p>{recipe.summary}</p>
+        
+        {/* Meta Information */}
+        <ul>
+          <li>Will take {recipe.time} minutes to make</li>
+          <li>Serves {recipe.servingSize} people</li>
+          {recipe.averageRating && <li>Rating of {recipe.averageRating} of 5 stars</li>}
+        </ul>
+        
+        {/* Hero Image */}
+        {recipe.image?.[0] && (
+          <img 
+            src={recipe.image[0].url} 
+            alt={recipe.title}
+          />
+        )}
+      </section>
       
       {/* Ingredients */}
       <section>
@@ -110,6 +97,19 @@ export default function Recipe({ loaderData }: Route.ComponentProps) {
           ))}
         </ol>
       </section>
-    </main>
+      
+      {/* Chefs */}
+      {recipe.chefs && recipe.chefs.length > 0 && (
+        <section>
+          <h2>Chef{recipe.chefs.length > 1 ? 's' : ''}</h2>
+          {recipe.chefs?.map(chef => (
+            <Fragment key={chef.title}>
+              <h3>{chef.title}</h3>
+              <p>{chef.summary}</p>
+            </Fragment>
+          ))}
+        </section>
+      )}
+    </>
   );
 } 

@@ -39,7 +39,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     <>
       <p>Try out a bookmarklet to take care of the recipe even faster!</p>
       <label htmlFor="bookmarklet">The bookmarklet code</label>
-      <textarea id="bookmarklet" ref={textareaRef}>{`javascript:window.location.replace('${loaderData.appUrl}/'+window.location.href.split('/recipes/')[1].split('/')[0])`}</textarea>
+      <textarea id="bookmarklet" ref={textareaRef} defaultValue={`javascript:window.location.replace('${loaderData.appUrl}/'+window.location.href.split('/recipes/')[1].split('/')[0])`} readOnly></textarea>
       <button type="button" onClick={clickHandler}>Copy code</button>
       <div aria-live="polite">{message && <p>{message}</p>}</div>
     </>

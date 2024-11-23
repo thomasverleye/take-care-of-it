@@ -1,1 +1,48 @@
+/**
+ * ⚠️ Only import GLOBAL CSS here that should be always be loaded, everywhere.
+ */
+ @import url('normalize.css/normalize');
 
+/* reset */
+html,
+body {
+  @media (prefers-color-scheme: dark) {
+    color-scheme: dark;
+  }
+}
+
+/* typography */
+:root {
+  --font-size-body: clamp(1.125rem, 0.9946rem + 0.6522vw, 1.5rem);
+  --font-size-h1: clamp(3rem, 1.9565rem + 5.2174vw, 6rem);
+  --font-size-h2: clamp(2.25rem, 1.2935rem + 4.7826vw, 5rem);
+  --font-size-hx: clamp(2rem, 1.6522rem + 1.7391vw, 3rem);
+}
+
+body, button, input, textarea {
+  font-family: 'Courier New', monospace;
+  font-size: var(--font-size-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: Garamond, serif;
+}
+h1 {
+  font-size: var(--font-size-h1);
+}
+h2 {
+  font-size: var(--font-size-h2);
+}
+h3, h4, h5, h6 {
+  font-size: var(--font-size-hx);
+}
+
+/* compositioning */
+:root {
+  --space-s: clamp(1rem, 0.3043rem + 3.4783vw, 3rem);
+  --space-m: clamp(1.5rem, 0.4565rem + 5.2174vw, 4.5rem);
+  --space-l: clamp(2rem, 0.6087rem + 6.9565vw, 6rem);
+}
+body {
+  padding: var(--space-s);
+}

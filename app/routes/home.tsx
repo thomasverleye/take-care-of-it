@@ -37,11 +37,28 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   );
   return (
     <>
-      <p>Try out a bookmarklet to take care of the recipe even faster!</p>
-      <label htmlFor="bookmarklet">The bookmarklet code</label>
-      <textarea id="bookmarklet" ref={textareaRef} defaultValue={`javascript:window.location.replace('${loaderData.appUrl}/'+window.location.href.split('/recipes/')[1].split('/')[0])`} readOnly></textarea>
-      <button type="button" onClick={clickHandler}>Copy code</button>
-      <div aria-live="polite">{message && <p>{message}</p>}</div>
+    {/* Steps */}
+    <section className="u-space-inline-m">
+      <p>Mob recipes without ads or need to login</p>
+      <ol>
+        <li>Copy the <a href="https://www.mob.co.uk/home">Mob</a> url (for example: <em>https://www.mob.co.uk/recipes/miso-udon-carbonara</em>)</li>
+        <li>Paste it in the form above</li>
+        <li>...</li>
+        <li>Profit!</li>
+      </ol>
+    </section>
+    {/* Bookmarklet */}
+    <section className="c-form c-form--align-start u-grid u-background">
+      <p className="c-form__intro">Try out the bookmarklet to take care of the recipe even faster!</p>
+      <label className="c-form__label" htmlFor="bookmarklet">Bookmarklet</label>
+      <div className="c-form__input">
+        <textarea id="bookmarklet" ref={textareaRef} defaultValue={`javascript:window.location.replace('${loaderData.appUrl}/'+window.location.href.split('/recipes/')[1].split('/')[0])`} readOnly></textarea>
+      </div>
+      <div className="c-form__action">
+        <button type="button" onClick={clickHandler}>Copy code</button>
+        <p aria-live="polite">{message && <span>{message}</span>}</p>
+      </div>
+    </section>
     </>
   )
 }

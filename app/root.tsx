@@ -1,7 +1,7 @@
 import {
-  Form,
   isRouteErrorResponse,
   Links,
+  LinksFunction,
   Meta,
   Outlet,
   redirect,
@@ -10,12 +10,18 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
-import "./app.css";
+import styles from "./app.css?url";
+
+export const links: LinksFunction = () => {
+  return [
+    { rel: 'stylesheet', href: styles },
+  ]
+};
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Take care of it" },
+    { name: "description", content: "Get the ingredients and instructions from the Mob." },
   ];
 }
 
@@ -23,11 +29,18 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const url = formData.get("url");
 
-  if (!url || typeof url !== 'string' || !url.startsWith('https://www.mob.co.uk/recipes/')) {
+  if (typeof url !== 'string') {
+    throw new Error('STAPH');
+  }
+
+  if (!url || !url.startsWith('https://www.mob.co.uk/recipes/')) {
     return {
       errors: {
         url: 'Incorrect url, it needs to start with https://www.mob.co.uk/recipes/',
-      }
+      },
+      values: {
+        url,
+      },
     };
   }
 
@@ -54,27 +67,30 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App({ actionData }: Route.ComponentProps) {
-  const urlError = actionData?.errors?.url;
-  
+  const error = actionData?.errors?.url;
+  const value = actionData?.values?.url;
   return (
     <>
-      <Form method="post">
-        <label htmlFor="url">Mob Kitchen url</label>
-        <input 
-          id="url" 
-          type="url" 
-          name="url"
-          aria-invalid={urlError ? true : undefined}
-          aria-describedby={urlError ? "url-error" : undefined}
-        />
-        {urlError && (
-          <p id="url-error" className="error">
-            {urlError}
-          </p>
-        )}
-        <button type="submit">Take care of it</button>
-      </Form>
       <main>
+        <form action="/" method="post" className="c-form u-grid u-background">
+          <label className="c-form__label" htmlFor="url">Mob kitchen URL</label>
+          <div className="c-form__input">  
+            <input 
+              aria-describedby={error ? "url-error" : undefined}
+              aria-invalid={error ? true : undefined}
+              defaultValue={value}
+              id="url" 
+              name="url"
+              type="url" 
+            />
+            {error && (
+              <p id="url-error" className="error">
+                {error}
+              </p>
+            )}
+          </div>
+          <button className="c-form__action" type="submit">Take care of it</button>
+        </form>
         <Outlet />
       </main>
     </>

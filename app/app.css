@@ -14,9 +14,10 @@ body {
 /* typography */
 :root {
   --font-size-body: clamp(1.125rem, 0.9946rem + 0.6522vw, 1.5rem);
-  --font-size-h1: clamp(3rem, 1.9565rem + 5.2174vw, 6rem);
-  --font-size-h2: clamp(2.25rem, 1.2935rem + 4.7826vw, 5rem);
-  --font-size-hx: clamp(2rem, 1.6522rem + 1.7391vw, 3rem);
+  --font-size-h1: clamp(2.25rem, 1.2935rem + 4.7826vw, 5rem);
+  --font-size-h2: clamp(2rem, 1.6522rem + 1.7391vw, 3rem);
+  --font-size-hx: clamp(1.5rem, 1.3261rem + 0.8696vw, 2rem);
+  --font-size-small: clamp(0.875rem, 0.788rem + 0.4348vw, 1.125rem);;
 }
 
 body, button, input, textarea {
@@ -27,22 +28,241 @@ body, button, input, textarea {
 h1, h2, h3, h4, h5, h6 {
   font-family: Garamond, serif;
 }
+
 h1 {
   font-size: var(--font-size-h1);
 }
+
 h2 {
   font-size: var(--font-size-h2);
 }
+
 h3, h4, h5, h6 {
   font-size: var(--font-size-hx);
 }
 
+.t-small {
+  font-size: var(--font-size-small);
+}
+
 /* compositioning */
 :root {
+  --space-3xs: clamp(0.375rem, 0.3315rem + 0.2174vw, 0.5rem);
+  --space-2xs: clamp(0.75rem, 0.663rem + 0.4348vw, 1rem);
+  --space-xs: clamp(1.125rem, 0.9946rem + 0.6522vw, 1.5rem);
   --space-s: clamp(1rem, 0.3043rem + 3.4783vw, 3rem);
   --space-m: clamp(1.5rem, 0.4565rem + 5.2174vw, 4.5rem);
   --space-l: clamp(2rem, 0.6087rem + 6.9565vw, 6rem);
+  
+  --grid-max-width: 85rem;
+  --grid-column-gap: clamp(0.5rem, -0.0534rem + 2.7668vw, 2.25rem);
+  --grid-row-gap: var(--space-m);
+  --grid-columns: 12;
 }
+
 body {
-  padding: var(--space-s);
+  padding-block: var(--space-s);
+}
+
+main {
+  max-width: var(--grid-max-width);
+  margin-inline: auto;
+}
+
+section {
+  margin-block: var(--space-m);
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+h1, h2 {
+  margin-block: var(--space-s);
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+p, ul, ol, li, h3, h4, h5, h6 {
+  margin-block: var(--space-xs);
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+}
+
+th, td {
+  border: 1px solid currentColor;
+  padding-block: var(--space-3xs);
+  padding-inline: var(--space-2xs);
+}
+
+input, textarea, button {
+  border-radius: 0;
+  padding-block: var(--space-2xs);
+  padding-inline: var(--space-xs);
+  box-sizing: border-box;
+}
+
+input, textarea {
+  border: 1px solid currentColor;
+  width: 100%;
+}
+
+textarea {
+  resize: none;
+  field-sizing: content;
+}
+
+button {
+  border: 1px solid currentColor;
+  background-color: transparent;
+  width: max-content;
+}
+
+/* components */
+/* hero */
+.c-hero {
+  padding: var(--space-m);
+}
+
+.c-hero__content,
+.c-hero__image {
+  grid-column: 1 / 13;
+}
+
+@media (min-width: 64em) {
+  .c-hero__content {
+    grid-column: 1 / 8;
+  }
+  .c-hero__image {
+    grid-column: 8 / 13;
+  }
+}
+
+/* recipe */
+.c-recipe {
+  padding: var(--space-m);
+}
+
+.c-recipe__ingredients,
+.c-recipe__method {
+  grid-column: 1 / 13;
+}
+
+@media (min-width: 64em) {
+  .c-recipe__ingredients {
+    grid-column: 1 / 7;
+  }
+  .c-recipe__method {
+    grid-column: 7 / 13;
+  }
+}
+
+/* form */
+.c-form {
+  padding: var(--space-m);
+  align-items: center;
+}
+
+.c-form--align-start {
+  align-items: start;
+}
+
+.c-form__label,
+.c-form__input,
+.c-form__intro {
+  grid-column: 1 / 13;
+}
+
+.c-form__intro {
+  margin-bottom: 0;
+}
+
+@media (min-width: 64em) {
+  .c-form__label {
+    grid-column: 1 / 4;
+  }
+
+  .c-form__input {
+    grid-column: 4 / 10;
+  }
+
+  .c-form__action {
+    grid-column: 10 / 13;
+    justify-self: end;
+  }
+}
+
+/* chefs */
+.c-chefs {
+  display: flex;
+  align-items: center;
+}
+
+.c-chefs__title {
+  margin: 0;
+}
+
+.c-chefs__image {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  margin-right: var(--space-2xs);
+}
+
+/* utilities */
+.u-grid {
+  display: grid;
+  column-gap: var(--grid-column-gap);
+  row-gap: var(--grid-row-gap);
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
+}
+
+.u-background {
+  position: relative;
+
+  &::before {
+    content: '';
+    background-color: currentColor;
+    opacity: 0.02;
+    position: absolute;
+    inset: 0 0 0 0;
+    z-index: -1;
+  }
+}
+
+.u-table-cell-inverted {
+  background-color: CanvasText;
+  color: Canvas;
+  border-color: CanvasText;
+}
+
+.u-space-inline-m {
+  padding-inline: var(--space-m);
 }

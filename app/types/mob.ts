@@ -53,7 +53,8 @@ interface Ingredient {
 
 interface RecipeIngredient {
   id: string;
-  typeHandle: 'ingredient';
+  typeHandle: 'ingredient' | 'header';
+  heading?: string;
   label: string;
   quantity: string | null;
   toServe: boolean;

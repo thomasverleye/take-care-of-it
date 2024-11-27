@@ -19,7 +19,6 @@ jobs:
         run: npm ci
       - name: build
         run: npm run build
-      - uses: actions/checkout@v4
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:

@@ -6,7 +6,9 @@ declare global {
 
 declare module "react-router" {
   export interface AppLoadContext {
-    VALUE_FROM_CLOUDFLARE: string;
+    env: CloudflareEnvironment & {
+      APP_URL?: string;
+    };
   }
 }
 
@@ -18,6 +20,6 @@ const requestHandler = createRequestHandler(
 
 export default {
   fetch(request, env) {
-    return requestHandler(request);
+    return requestHandler(request, { env });
   },
 } satisfies ExportedHandler<CloudflareEnvironment>;

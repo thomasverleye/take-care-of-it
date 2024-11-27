@@ -1,9 +1,9 @@
 import { useCallback, useRef, useState } from "react";
 import type { Route } from "./+types/home";
 
-export function loader() {
+export function loader({ context }: Route.LoaderArgs) {
   return {
-    appUrl: process.env?.APP_URL ?? 'http://localhost:5173',
+    appUrl: context.env.APP_URL ?? process.env?.APP_URL ?? 'http://localhost:5173',
   }
 }
 

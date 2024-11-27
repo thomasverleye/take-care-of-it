@@ -18,8 +18,6 @@ const requestHandler = createRequestHandler(
 
 export default {
   fetch(request, env) {
-    return requestHandler(request, {
-      VALUE_FROM_CLOUDFLARE: "Hello from Cloudflare",
-    });
+    return requestHandler(request);
   },
 } satisfies ExportedHandler<CloudflareEnvironment>;

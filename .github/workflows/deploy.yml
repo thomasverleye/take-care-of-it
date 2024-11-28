@@ -27,5 +27,6 @@ jobs:
           environment: production
           secrets: |
             APP_URL
+          command: deploy --project-name ${{ vars.PROJECT_NAME }}
         env:
           APP_URL: ${{ vars.APP_URL }}

@@ -3,9 +3,9 @@ name: Deploy
 on:
   push:
     branches: main
-    paths: [src/**, package.json]
+    paths: [app/**, package.json]
   pull_request:
-    paths: [src/**, package.json]
+    paths: [app/**, package.json]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

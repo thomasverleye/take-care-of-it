@@ -1,4 +1,5 @@
 import { createRequestHandler } from "react-router";
+import { CACHE_MAX_AGE, CDN_CACHE_MAX_AGE } from "../app/constants";
 
 declare global {
   interface CloudflareEnvironment {}
@@ -19,7 +20,25 @@ const requestHandler = createRequestHandler(
 );
 
 export default {
-  fetch(request, env) {
-    return requestHandler(request, { env });
+  async fetch(request, env) {
+    const cache = caches.default;
+    const cacheKey = new Request(request.url, request);
+    const cachedResponse = await cache.match(cacheKey);
+
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+
+    const response = await requestHandler(request, { env });
+
+    const cacheControl = response.headers.get("Cache-Control");
+    if (cacheControl && cacheControl.includes("max-age")) {
+      await cache.put(cacheKey, response.clone());
+    }
+
+    response.headers.set("Cache-Control", `public, max-age=${CACHE_MAX_AGE}`);
+    response.headers.set("CDN-Cache-Control", `public, max-age=${CDN_CACHE_MAX_AGE}`);
+
+    return response;
   },
 } satisfies ExportedHandler<CloudflareEnvironment>;

@@ -36,3 +36,8 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy --env ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
           environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
+      - name: Purge Cloudflare Cache
+        uses: cloudflare/purge-cache-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          zoneId: ${{ secrets.CLOUDFLARE_ZONE_ID }}

@@ -2,6 +2,7 @@ import { Fragment } from "react/jsx-runtime";
 import type { Route } from "./+types/slug";
 import type { Recipe } from "~/types/mob";
 import simplifyRecipe from "~/utils/simplifyRecipe";
+import { CDN_CACHE_MAX_AGE, CACHE_MAX_AGE } from "../constants";
 
 export function meta({ data }: Route.MetaArgs) {
   return [
@@ -36,11 +37,17 @@ export async function loader({ params }: Route.LoaderArgs) {
 
     
     const fullRecipe: Recipe = jsonData.props.pageProps.recipe;
-    return { recipe: simplifyRecipe(fullRecipe) };
+    const cacheControlHeader = `public, max-age=${CACHE_MAX_AGE}`; // Cache control header for successful responses
+    return new Response(JSON.stringify({ recipe: simplifyRecipe(fullRecipe) }), {
+      headers: { "Cache-Control": cacheControlHeader, "CDN-Cache-Control": `public, max-age=${CDN_CACHE_MAX_AGE}` },
+    });
     
   } catch (error) {
     console.error('Error fetching or compiling recipe:', error);
-    throw new Response("Recipe not found", { status: 404 });
+    return new Response("Recipe not found", {
+      status: 404,
+      headers: { "Cache-Control": `public, max-age=${CACHE_MAX_AGE}`, "CDN-Cache-Control": `public, max-age=${CDN_CACHE_MAX_AGE}` }, // Cache control header for 404 pages
+    });
   }
 }
 

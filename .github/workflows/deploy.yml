@@ -15,11 +15,12 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
-      - name: dependencies
+      - name: Dependencies
         run: npm ci
-      - name: build
+      - name: Build
         run: npm run build
       - name: Deploy
+        id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -30,3 +31,7 @@ jobs:
             APP_URL
         env:
           APP_URL: ${{ vars.APP_URL }}
+      - name: Print deployment-url
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: echo $DEPLOYMENT_URL

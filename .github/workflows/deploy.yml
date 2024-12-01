@@ -2,14 +2,22 @@ name: Deploy
 
 on:
   push:
-    branches:
-      - main
+    branches: main
+    paths: [src/**, package.json]
+  pull_request:
+    paths: [src/**, package.json]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Deploy
-    environment: production
+    environment:
+      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
+      url: ${{ steps.deploy.outputs.deployment-url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -26,9 +34,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --env production
-          environment: production
-      - name: Print deployment-url
-        env:
-          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
-        run: echo "url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
+          command: deploy --env ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
+          environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}

@@ -4,6 +4,12 @@ compatibility_date = "2024-11-18"
 main = "./build/server/index.js"
 assets = { directory = "./build/client/" }
 
+[env.preview]
+name = "take-care-of-it"
+
+[env.preview.vars]
+APP_URL = "https://takecareofit.co.uk/"
+
 [env.production]
 name = "take-care-of-it"
 

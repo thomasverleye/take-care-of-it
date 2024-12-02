@@ -1,43 +1,10 @@
 import { useCallback, useRef, useState } from "react";
 import type { Route } from "./+types/home";
-import { CDN_CACHE_MAX_AGE, CACHE_MAX_AGE } from "../constants";
 
 export function loader({ context }: Route.LoaderArgs) {
   return {
     appUrl: context.env.APP_URL ?? process.env?.APP_URL ?? 'http://localhost:5173',
   }
-}
-
-export async function action({ request }: Route.ActionArgs) {
-  const formData = await request.formData();
-  const url = formData.get("url");
-
-  if (typeof url !== 'string') {
-    throw new Error('STAPH');
-  }
-
-  if (!url || !url.startsWith('https://www.mob.co.uk/recipes/')) {
-    return {
-      errors: {
-        url: 'Incorrect url, it needs to start with https://www.mob.co.uk/recipes/',
-      },
-      values: {
-        url,
-      },
-    };
-  }
-
-  const slug = url.split('/recipes/')[1].split('/')[0];
-  const response = new Response(null, {
-    status: 302,
-    headers: {
-      Location: `/${slug}`,
-      "Cache-Control": `public, max-age=${CACHE_MAX_AGE}`,
-      "CDN-Cache-Control": `public, max-age=${CDN_CACHE_MAX_AGE}`,
-    },
-  });
-
-  return response;
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {

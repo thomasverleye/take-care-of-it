@@ -20,7 +20,7 @@ jobs:
     name: Deploy
     environment:
       name: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'production' || 'preview' }}
-      url: ${{ steps.get_release_url.outputs.release_url }}
+      url: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.deploy.outputs.deployment-url || steps.get_release_url.outputs.release_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -47,4 +47,6 @@ jobs:
         id: get_release_url
         env:
           CMD_OUTPUT: ${{ steps.deploy.outputs.command-output }}
-        run: echo release_url=$CMD_OUTPUT >> $GITHUB_OUTPUT
+        run: |
+          URL=$(echo "$CMD_OUTPUT" | grep -o 'https://[^[:space:]]*\.workers\.dev')
+          echo "release_url=$URL" >> $GITHUB_OUTPUT

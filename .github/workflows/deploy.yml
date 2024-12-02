@@ -38,7 +38,6 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy --env ${{ env.IS_PRODUCTION == 'true' && 'production' || 'preview' }}
-          environment: ${{ env.IS_PRODUCTION == 'true' && 'production' || 'preview' }}
       - name: Cloudflare Purge Cache
         uses: jakejarvis/cloudflare-purge-action@v0.3.0
         if: ${{ env.IS_PRODUCTION == 'true' }}

@@ -41,7 +41,7 @@ jobs:
           environment: ${{ env.IS_PRODUCTION && 'production' || 'preview' }}
       - name: Cloudflare Purge Cache
         uses: jakejarvis/cloudflare-purge-action@v0.3.0
-        if: env.IS_PRODUCTION
+        if: ${{ env.IS_PRODUCTION }}
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           zoneId: ${{ secrets.CLOUDFLARE_ZONE_ID }}

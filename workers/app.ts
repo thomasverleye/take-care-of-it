@@ -20,25 +20,7 @@ const requestHandler = createRequestHandler(
 );
 
 export default {
-  async fetch(request, env) {
-    const cache = caches.default;
-    const cacheKey = new Request(request.url, request);
-    const cachedResponse = await cache.match(cacheKey);
-
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-
-    const response = await requestHandler(request, { env });
-
-    const cacheControl = response.headers.get("Cache-Control");
-    if (cacheControl && cacheControl.includes("max-age")) {
-      await cache.put(cacheKey, response.clone());
-    }
-
-    response.headers.set("Cache-Control", `public, max-age=${CACHE_MAX_AGE}`);
-    response.headers.set("CDN-Cache-Control", `public, max-age=${CDN_CACHE_MAX_AGE}`);
-
-    return response;
+  fetch(request, env) {
+    return requestHandler(request, { env });
   },
 } satisfies ExportedHandler<CloudflareEnvironment>;

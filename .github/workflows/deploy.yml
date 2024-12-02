@@ -6,6 +6,7 @@ on:
     paths: [app/**, package.json]
   pull_request:
     paths: [app/**, package.json]
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

@@ -15,6 +15,3 @@ name = "take-care-of-it"
 
 [env.production.vars]
 APP_URL = "https://takecareofit.co.uk/"
-
-[cache]
-default_cache_duration = 3600

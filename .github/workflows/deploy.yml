@@ -43,5 +43,4 @@ jobs:
         uses: jakejarvis/cloudflare-purge-action@v0.3.0
         if: ${{ env.IS_PRODUCTION }}
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          zoneId: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_PURGE_CACHE_API_TOKEN }}

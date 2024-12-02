@@ -1,4 +1,5 @@
 import { createRequestHandler } from "react-router";
+import { CACHE_MAX_AGE, CDN_CACHE_MAX_AGE } from "../app/constants";
 
 declare global {
   interface CloudflareEnvironment {}

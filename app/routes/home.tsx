@@ -41,7 +41,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     <section className="u-space-inline-m">
       <p>Mob recipes without ads or need to login</p>
       <ol>
-        <li>Copy the <a href="https://www.mob.co.uk/home">Mob</a> url (for example: <em>https://www.mob.co.uk/recipes/miso-udon-carbonara</em>)</li>
+        <li>Copy the <a href="https://www.mob.co.uk/home">Mob</a> url (for example: <em>https://www.mob.co.uk/recipes/veggie-satay-noodles</em>)</li>
         <li>Paste it in the form above</li>
         <li>...</li>
         <li>Profit!</li>

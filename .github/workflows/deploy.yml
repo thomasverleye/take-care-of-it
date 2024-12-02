@@ -20,7 +20,7 @@ jobs:
     name: Deploy
     environment:
       name: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'production' || 'preview' }}
-      url: ${{ steps.deploy.outputs.deployment-url }}
+      url: ${{ steps.deploy.outputs.command-output }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

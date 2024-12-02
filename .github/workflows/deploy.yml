@@ -43,6 +43,7 @@ jobs:
           URL=$(echo "$CMD_OUTPUT" | grep -o 'https://[^[:space:]]*\.workers\.dev')
           echo "release_url=$URL" >> $GITHUB_OUTPUT
   purge-cache:
+    name: Purge Cache
     runs-on: ubuntu-latest
     needs: deploy
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}

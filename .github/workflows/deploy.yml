@@ -11,12 +11,15 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  IS_PRODUCTION: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Deploy
     environment:
-      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
+      name: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'production' || 'preview' }}
       url: ${{ steps.deploy.outputs.deployment-url }}
     steps:
       - uses: actions/checkout@v4
@@ -34,11 +37,11 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --env ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
-          environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
+          command: deploy --env ${{ env.IS_PRODUCTION && 'production' || 'preview' }}
+          environment: ${{ env.IS_PRODUCTION && 'production' || 'preview' }}
       - name: Cloudflare Purge Cache
         uses: jakejarvis/cloudflare-purge-action@v0.3.0
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: env.IS_PRODUCTION
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           zoneId: ${{ secrets.CLOUDFLARE_ZONE_ID }}

@@ -11,9 +11,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  IS_PRODUCTION: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'true' || 'false' }}
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -37,12 +34,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --env ${{ env.IS_PRODUCTION == 'true' && 'production' || 'preview' }}
-      - name: Cloudflare Purge Cache
-        uses: jakejarvis/cloudflare-purge-action@v0.3.0
-        if: ${{ env.IS_PRODUCTION == 'true' }}
-        env:
-          CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_PURGE_CACHE_API_TOKEN }}
+          command: deploy --env ${{  github.event_name == 'push' && github.ref == 'refs/heads/main' && 'production' || 'preview' }}
       - name: Set Release URL
         id: get_release_url
         env:
@@ -50,3 +42,12 @@ jobs:
         run: |
           URL=$(echo "$CMD_OUTPUT" | grep -o 'https://[^[:space:]]*\.workers\.dev')
           echo "release_url=$URL" >> $GITHUB_OUTPUT
+  purge-cache:
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    steps:
+      - name: Cloudflare Purge Cache
+        uses: jakejarvis/cloudflare-purge-action@v0.3.0
+        env:
+          CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_PURGE_CACHE_API_TOKEN }}

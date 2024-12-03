@@ -17,8 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy
     environment:
-      name: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'production' || 'preview' }}
-      url: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.deploy.outputs.deployment-url || steps.get_release_url.outputs.release_url }}
+      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
+      url: ${{ github.ref == 'refs/heads/main' && steps.deploy.outputs.deployment-url || steps.get_release_url.outputs.release_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -35,7 +35,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --env ${{  github.event_name == 'push' && github.ref == 'refs/heads/main' && 'production' || 'preview' }}
+          command: deploy --env ${{  github.ref == 'refs/heads/main' && 'production' || 'preview' }}
       - name: Set Release URL
         id: get_release_url
         env:
@@ -47,7 +47,7 @@ jobs:
     name: Purge Cache
     runs-on: ubuntu-latest
     needs: deploy
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    if: ${{ github.ref == 'refs/heads/main' }}
     steps:
       - name: Cloudflare Purge Cache
         uses: jakejarvis/cloudflare-purge-action@v0.3.0

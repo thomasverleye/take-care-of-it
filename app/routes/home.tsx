@@ -3,10 +3,11 @@ import type { Route } from "./+types/home";
 import { data } from "react-router";
 import { DEFAULT_CACHE_HEADERS } from "~/constants";
 
-export function headers(_: Route.HeadersArgs) {
-  return {
-    ...DEFAULT_CACHE_HEADERS,
-  };
+export function headers({
+  actionHeaders,
+  loaderHeaders,
+}: Route.HeadersArgs) {
+  return actionHeaders ? actionHeaders : loaderHeaders;
 }
 
 export function loader({ context }: Route.LoaderArgs) {

@@ -1,10 +1,20 @@
 import { useCallback, useRef, useState } from "react";
 import type { Route } from "./+types/home";
+import { data } from "react-router";
+import { DEFAULT_CACHE_HEADERS } from "~/constants";
+
+export function headers(_: Route.HeadersArgs) {
+  return {
+    ...DEFAULT_CACHE_HEADERS,
+  };
+}
 
 export function loader({ context }: Route.LoaderArgs) {
-  return {
+  return data({
     appUrl: context.env.APP_URL ?? process.env?.APP_URL ?? 'http://localhost:5173',
-  }
+  }, {
+    headers: { ...DEFAULT_CACHE_HEADERS },
+  });
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {

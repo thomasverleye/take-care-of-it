@@ -2,8 +2,15 @@ import { Fragment } from "react/jsx-runtime";
 import type { Route } from "./+types/slug";
 import type { Recipe } from "~/types/mob";
 import simplifyRecipe from "~/utils/simplifyRecipe";
-import { CDN_CACHE_MAX_AGE, CACHE_MAX_AGE } from "../constants";
+import { DEFAULT_CACHE_HEADERS } from "../constants";
 import { data } from "react-router";
+
+export function headers({
+  actionHeaders,
+  loaderHeaders,
+}: Route.HeadersArgs) {
+  return actionHeaders ? actionHeaders : loaderHeaders;
+}
 
 export function meta({ data }: Route.MetaArgs) {
   return [
@@ -38,16 +45,15 @@ export async function loader({ params }: Route.LoaderArgs) {
 
     
     const fullRecipe: Recipe = jsonData.props.pageProps.recipe;
-    const cacheControlHeader = `public, max-age=${CACHE_MAX_AGE}`; // Cache control header for successful responses
     return data({ recipe: simplifyRecipe(fullRecipe) }, {
-      headers: { "Cache-Control": cacheControlHeader, "CDN-Cache-Control": `public, max-age=${CDN_CACHE_MAX_AGE}` },
+      headers: { ...DEFAULT_CACHE_HEADERS },
     });
     
   } catch (error) {
     console.error('Error fetching or compiling recipe:', error);
     throw data("Recipe not found", {
       status: 404,
-      headers: { "Cache-Control": `public, max-age=${CACHE_MAX_AGE}`, "CDN-Cache-Control": `public, max-age=${CDN_CACHE_MAX_AGE}` }, // Cache control header for 404 pages
+      headers: { ...DEFAULT_CACHE_HEADERS }, // Cache control header for 404 pages
     });
   }
 }

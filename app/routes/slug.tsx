@@ -5,11 +5,10 @@ import simplifyRecipe from "~/utils/simplifyRecipe";
 import { DEFAULT_CACHE_HEADERS } from "../constants";
 import { data } from "react-router";
 
-export function headers({
-  actionHeaders,
-  loaderHeaders,
-}: Route.HeadersArgs) {
-  return actionHeaders ? actionHeaders : loaderHeaders;
+export function headers() {
+  return {
+    ...DEFAULT_CACHE_HEADERS,
+  };
 }
 
 export function meta({ data }: Route.MetaArgs) {
